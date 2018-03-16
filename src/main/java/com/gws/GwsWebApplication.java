@@ -100,7 +100,7 @@ public class GwsWebApplication {
 			// 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
 			// 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
 			String fileKey = "README.md";
-			ossClient.putObject(bucketName, fileKey, new File("/Users/wangdong/Aliyun/alioss/src/main/resources/application.properties"));
+			ossClient.putObject(bucketName, fileKey, new File("/Users/wangdong/Aliyun/alioss-demo/src/main/resources/application.properties"));
 			System.out.println("Object：" + fileKey + "存入OSS成功。");
 
 			// 查看Bucket中的Object。详细请参看“SDK手册 > Java-SDK > 管理文件”。
