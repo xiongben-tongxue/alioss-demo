@@ -37,9 +37,6 @@ public class AliossServiceImpl implements AliossService{
     @Value("${oss.cdn.https.host}")
     private String cdnHttpsHost;
 
-    @Value("${oss.uploadPath}")
-    private String ossUploadPath;
-
     private String http = "http://";
 
     private static String firstKey = "my-first-key";
