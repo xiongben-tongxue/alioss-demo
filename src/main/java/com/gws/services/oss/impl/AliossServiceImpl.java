@@ -39,8 +39,6 @@ public class AliossServiceImpl implements AliossService{
 
     private String http = "http://";
 
-    private static String firstKey = "my-first-key";
-
     @PostConstruct
     public void init() {
         logger.info("ossClient Started");
