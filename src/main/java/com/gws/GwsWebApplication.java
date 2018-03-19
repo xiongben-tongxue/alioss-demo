@@ -12,13 +12,14 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.*;
 import java.util.List;
 
 @SpringBootApplication()
 public class GwsWebApplication {
-	static Logger logger = Logger.getLogger(HelloOSS.class);
+	static Logger logger = Logger.getLogger(GwsWebApplication.class);
 
 	// endpoint是访问OSS的域名。如果您已经在OSS的控制台上 创建了Bucket，请在控制台上查看域名。
 	// 如果您还没有创建Bucket，endpoint选择请参看文档中心的“开发人员指南 > 基本概念 > 访问域名”，
