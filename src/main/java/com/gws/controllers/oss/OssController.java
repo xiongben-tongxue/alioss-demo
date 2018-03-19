@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -34,5 +36,31 @@ public class OssController extends BaseController {
 
         return success(result);
     }
+
+    /**
+     * 直接把文件下载到本地
+     * OSSObject实例包含文件所在的存储空间（Bucket）、文件的名称、Object Metadata以及一个输入流；
+     * 现将流返回。
+     * 通过操作输入流将文件的内容读取到文件或者内存中。而Object Metadata包含ETag、HTTP Header及自定义的元信息；
+     * @param bucket
+     * @param key
+     * @return
+     */
+    @RequestMapping("downByStream")
+    public JsonResult downByStream(String bucket,String key) throws IOException {
+
+        InputStream result = aliossService.downByStream(bucket, key);
+
+        return success(result);
+    }
+
+    @RequestMapping("downFileToLocalPath")
+    public JsonResult downFileToLocalPath(String bucket, String key, String loaclPath){
+
+        aliossService.downFileToLocalPath(bucket,key,loaclPath);
+
+        return success(true);
+    }
+
 
 }

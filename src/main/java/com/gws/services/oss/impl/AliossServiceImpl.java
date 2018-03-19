@@ -1,16 +1,16 @@
 package com.gws.services.oss.impl;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.GetObjectRequest;
+import com.aliyun.oss.model.OSSObject;
 import com.gws.GwsWebApplication;
 import com.gws.services.oss.AliossService;
 import org.apache.log4j.Logger;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -86,6 +86,47 @@ public class AliossServiceImpl implements AliossService{
         StringBuffer downCdnHttpsHost = stringBuffer.append(http).append(bucket).append(cdnHttpsHost);
 
         return new StringBuffer().append(downCdnHttpsHost).append("/").append(key).toString();
+    }
+
+    /**
+     * 流式下载
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public InputStream downByStream(String bucket,String key) throws IOException {
+        // 创建OSSClient实例
+        OSSClient ossClient = new OSSClient(ossEndpoint, ossAccessKeyId, ossAccessKeySecret);
+        OSSObject ossObject = ossClient.getObject(bucket, key);
+
+        // 读Object内容
+        System.out.println("Object content:");
+        InputStream inputStream = ossObject.getObjectContent();
+        //关闭流
+        inputStream.close();
+        // 关闭client
+        ossClient.shutdown();
+        return inputStream;
+    }
+
+    /**
+     * @param bucket        存储的空间
+     * @param key           存储的key
+     * @param loaclPath 本地保存的文件地址
+     */
+    @Override
+    public void downFileToLocalPath(String bucket, String key, String loaclPath) {
+        if (StringUtils.isEmpty(bucket) || StringUtils.isEmpty(key) || StringUtils.isEmpty(loaclPath)){
+            return;
+        }
+
+        // 创建OSSClient实例
+        OSSClient ossClient = new OSSClient(ossEndpoint, ossAccessKeyId, ossAccessKeySecret);
+        ossClient.getObject(new GetObjectRequest(bucket,key),new File(loaclPath));
+
+        // 关闭client
+        ossClient.shutdown();
     }
 
     private String getPostfix (String file){
