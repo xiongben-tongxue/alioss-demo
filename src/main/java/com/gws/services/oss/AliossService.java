@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * 阿里OssService实现类
@@ -28,9 +29,11 @@ public interface AliossService {
     InputStream downByStream(String bucket, String key) throws IOException;
 
     /**
-     *  @param bucket 存储的空间
-     * @param key 存储的key
-     * @param loaclPath 本地保存的文件地址
+     * 批量上传
+     * 上传多个文件
+     * @param files
+     * @param bucket
+     * @return
      */
-    void downFileToLocalPath(String bucket, String key,String loaclPath);
+    List<String> uploadFiles(MultipartFile[] files, String bucket);
 }

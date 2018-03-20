@@ -38,7 +38,7 @@ public class OssController extends BaseController {
     }
 
     /**
-     * 直接把文件下载到本地
+     *
      * OSSObject实例包含文件所在的存储空间（Bucket）、文件的名称、Object Metadata以及一个输入流；
      * 现将流返回。
      * 通过操作输入流将文件的内容读取到文件或者内存中。而Object Metadata包含ETag、HTTP Header及自定义的元信息；
@@ -54,12 +54,18 @@ public class OssController extends BaseController {
         return success(result);
     }
 
-    @RequestMapping("downFileToLocalPath")
-    public JsonResult downFileToLocalPath(String bucket, String key, String loaclPath){
+    /**
+     * 文件的批量上传
+     * @param files
+     * @param bucket
+     * @return
+     */
+    @RequestMapping("uploadFiles")
+    public JsonResult uploadFiles(@RequestParam("files") MultipartFile[] files, String bucket){
 
-        aliossService.downFileToLocalPath(bucket,key,loaclPath);
+        List<String> result = aliossService.uploadFiles(files,bucket);
 
-        return success(true);
+        return success(result);
     }
 
 

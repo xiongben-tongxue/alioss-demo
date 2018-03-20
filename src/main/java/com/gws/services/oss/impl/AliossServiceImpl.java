@@ -9,11 +9,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -111,23 +115,30 @@ public class AliossServiceImpl implements AliossService{
     }
 
     /**
-     * @param bucket        存储的空间
-     * @param key           存储的key
-     * @param loaclPath 本地保存的文件地址
+     * 批量上传
+     * 上传多个文件
+     *
+     * @param files
+     * @param bucket
+     * @return
      */
     @Override
-    public void downFileToLocalPath(String bucket, String key, String loaclPath) {
-        if (StringUtils.isEmpty(bucket) || StringUtils.isEmpty(key) || StringUtils.isEmpty(loaclPath)){
-            return;
+    public List<String> uploadFiles(MultipartFile[] files, String bucket) {
+
+        if (null == files || StringUtils.isEmpty(bucket)){
+            return Collections.EMPTY_LIST;
         }
 
-        // 创建OSSClient实例
-        OSSClient ossClient = new OSSClient(ossEndpoint, ossAccessKeyId, ossAccessKeySecret);
-        ossClient.getObject(new GetObjectRequest(bucket,key),new File(loaclPath));
+        List<String> result = new ArrayList<>();
 
-        // 关闭client
-        ossClient.shutdown();
+        for (MultipartFile file : files){
+            String download = uploadFile(file,bucket);
+            result.add(download);
+        }
+
+        return CollectionUtils.isEmpty(result) ? Collections.EMPTY_LIST : result;
     }
+
 
     private String getPostfix (String file){
         if (null == file) {
