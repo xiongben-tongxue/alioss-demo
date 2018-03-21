@@ -1,7 +1,7 @@
 package com.gws.services.oss.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.model.GetObjectRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.gws.GwsWebApplication;
 import com.gws.services.oss.AliossService;
@@ -15,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 阿里Oss实现类
@@ -62,34 +59,12 @@ public class AliossServiceImpl implements AliossService{
             return null;
         }
 
-        StringBuilder key = new StringBuilder();
+        Map<String,Object> params = new HashMap<>();
+        params.put("file", JSONObject.toJSONString(file));
+        params.put("bucket",bucket);
 
-        String fileName = file.getOriginalFilename();
-        String postfix = getPostfix(fileName);
+        return null;
 
-        if (!StringUtils.isEmpty(postfix)) {
-            key.append(postfix).append("/");
-        }
-        key.append(UUID.randomUUID().toString());
-        if (!StringUtils.isEmpty(postfix)) {
-            key.append(".").append(postfix);
-        }
-        String fixKey = String.valueOf(key);
-        // 创建OSSClient实例
-        OSSClient ossClient = new OSSClient(ossEndpoint, ossAccessKeyId, ossAccessKeySecret);
-
-        try {
-            ossClient.putObject(bucket, fixKey, file.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // 关闭client
-        ossClient.shutdown();
-
-        StringBuffer stringBuffer = new StringBuffer();
-        StringBuffer downCdnHttpsHost = stringBuffer.append(http).append(bucket).append(cdnHttpsHost);
-
-        return new StringBuffer().append(downCdnHttpsHost).append("/").append(key).toString();
     }
 
     /**

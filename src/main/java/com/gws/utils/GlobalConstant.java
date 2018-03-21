@@ -8,7 +8,7 @@ import com.gws.dto.AccessLog;
  * 全局常量定义
  *
  * @version 
- * @author liuyi  2016年4月15日 下午5:02:56
+ * @author wangdong  2016年4月15日 下午5:02:56
  *
  */
 public final class GlobalConstant {
